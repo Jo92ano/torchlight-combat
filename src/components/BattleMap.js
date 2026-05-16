@@ -28,6 +28,8 @@ const OBSTACLE_TYPES = [
   { id: 'boulder',        label: 'Boulder',       icon: '🪨', blocks: true  },
   { id: 'pillar',         label: 'Pillar',        icon: '🏛️', blocks: true  },
   { id: 'barrel',         label: 'Barrel',        icon: '🛢️', blocks: false },
+  { id: 'table',          label: 'Table',         icon: '🪵', blocks: false },
+  { id: 'table_set',      label: 'Table (set)',   icon: '🍽️', blocks: false },
   { id: 'fire',           label: 'Fire',          icon: '🔥', blocks: false },
   { id: 'water',          label: 'Water',         icon: '🌊', blocks: false },
   // --- Doors & Passages ---
@@ -99,8 +101,9 @@ const generateTavern = () => {
   const tableSpots = [[5,2],[5,5],[5,8],[8,2],[8,5],[8,8],[11,3],[11,7]];
   tableSpots.forEach(([r, c]) => {
     if (chance(80)) {
-      placeObstacle(obstacles, r, c, 'barrel');
+      placeObstacle(obstacles, r, c, chance(50) ? 'table_set' : 'table');
       if (chance(60)) placeObstacle(obstacles, r+1, c, 'chair');
+      if (chance(40)) placeObstacle(obstacles, r, c+1, 'chair');
     }
   });
 
