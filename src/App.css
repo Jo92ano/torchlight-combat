@@ -1275,3 +1275,311 @@ input[type="number"] { -moz-appearance: textfield; }
   background: #c9a84c22;
   border-color: #c9a84c44;
 }
+/* ============================================================
+   TOP ROW LAYOUT (initiative + party manager)
+   ============================================================ */
+.top-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.initiative-column {
+  flex: 1;
+  min-width: 0;
+}
+
+.party-column {
+  width: 260px;
+  min-width: 260px;
+}
+
+/* ============================================================
+   PARTY MANAGER
+   ============================================================ */
+.party-manager {
+  background: #16213e;
+  border-radius: 12px;
+  border: 1px solid #c9a84c22;
+  padding: 16px;
+  height: 100%;
+}
+
+.party-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.party-title {
+  color: #c9a84c;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.party-header-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.party-new-btn {
+  background: #c9a84c;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.party-new-btn:hover { background: #e0c068; }
+
+.party-add-all-btn {
+  background: #0f3460;
+  color: #c9a84c;
+  border: 1px solid #c9a84c44;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.party-add-all-btn:hover {
+  background: #c9a84c;
+  color: #1a1a2e;
+}
+
+/* ---- Party list ---- */
+.party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.party-empty {
+  font-size: 0.75rem;
+  color: #556;
+  font-style: italic;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.party-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f3460;
+  border: 1px solid #c9a84c11;
+  border-radius: 8px;
+  padding: 7px 10px;
+  transition: border 0.2s;
+}
+
+.party-member:hover { border-color: #c9a84c22; }
+
+.party-token {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+}
+
+.party-member-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.party-member-name {
+  font-size: 0.85rem;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.party-member-role {
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.party-member-hp {
+  font-size: 0.75rem;
+  color: #c9a84c;
+  white-space: nowrap;
+}
+
+.party-member-btns {
+  display: flex;
+  gap: 3px;
+}
+
+.party-combat-btn,
+.party-edit-btn,
+.party-remove-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  line-height: 1;
+}
+
+.party-combat-btn:hover { background: #c9a84c22; }
+.party-edit-btn:hover   { background: #5588cc22; }
+.party-remove-btn       { color: #ff6b6b55; }
+.party-remove-btn:hover { background: #ff6b6b11; color: #ff6b6b; }
+
+/* ---- Add/Edit form ---- */
+.party-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #0f3460;
+  border: 1px solid #c9a84c33;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.party-form-title {
+  font-size: 0.8rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.party-form-input {
+  background: #16213e;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  color: #e0e0e0;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  width: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  transition: border 0.2s;
+}
+
+.party-form-input:focus { border-color: #c9a84c; outline: none; }
+.party-form-input::placeholder { color: #556; }
+
+/* Token picker in form */
+.party-token-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.party-token-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: 1px solid #c9a84c11;
+  border-radius: 6px;
+  padding: 5px 4px;
+  cursor: pointer;
+  font-size: 0.6rem;
+  color: #888;
+  transition: all 0.2s;
+}
+
+.party-token-option i { font-size: 1rem; }
+.party-token-option:hover { border-color: #c9a84c33; color: #e0e0e0; }
+.party-token-option.selected { color: #e0e0e0; }
+
+/* Form action buttons */
+.party-form-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.party-save-btn {
+  flex: 1;
+  background: #c9a84c;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.party-save-btn:hover { background: #e0c068; }
+
+.party-cancel-btn {
+  background: transparent;
+  color: #888;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.party-cancel-btn:hover { color: #e0e0e0; border-color: #c9a84c44; }
+/* ---- Initiative popup ---- */
+.init-popup {
+  background: #0f3460;
+  border: 1px solid #c9a84c44;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.init-popup-label {
+  font-size: 0.8rem;
+  color: #c9a84c;
+}
+
+.init-popup-label strong {
+  color: #e0e0e0;
+}
+
+.init-popup-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.init-popup-row .party-form-input {
+  flex: 1;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.init-popup-row .party-save-btn {
+  white-space: nowrap;
+  padding: 8px 14px;
+}
+
+.init-popup-row .party-cancel-btn {
+  padding: 8px 10px;
+}
