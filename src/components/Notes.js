@@ -244,7 +244,7 @@ function Notes() {
               </div>
               <div className="notes-list-preview">
                 {note.content
-                  ? note.content.replace(/[#*>\-\[\]]/g, '').slice(0, 60) + '...'
+                  ? note.content.replace(/[#*>\-[\]]/g, '').slice(0, 60) + '...'
                   : 'Empty note'}
               </div>
               <div className="notes-list-date">{formatDate(note.updatedAt)}</div>
