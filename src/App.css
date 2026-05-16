@@ -1,0 +1,1152 @@
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font-family: inherit;
+  outline: none;
+}
+
+input {
+  outline: none;
+}
+
+/* ============================================================
+   APP LAYOUT
+   ============================================================ */
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* initiative tracker stays narrow */
+.section-narrow {
+  max-width: 680px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #c9a84c;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+h2 {
+  color: #c9a84c;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Card container for each section */
+.section {
+  background-color: #16213e;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #c9a84c22;
+}
+
+/* ============================================================
+   SHARED INPUT STYLE
+   ============================================================ */
+.styled-input {
+  background: #0f3460;
+  border: 1px solid #c9a84c33;
+  border-radius: 8px;
+  color: #e0e0e0;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border 0.2s;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+.styled-input:focus { border-color: #c9a84c; }
+.styled-input::placeholder { color: #556; }
+
+/* Remove number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] { -moz-appearance: textfield; }
+
+/* ============================================================
+   SLIDER
+   ============================================================ */
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slider-group label {
+  font-size: 0.8rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.slider-group input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #0f3460;
+  border-radius: 3px;
+  border: 1px solid #c9a84c33;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #c9a84c;
+  cursor: pointer;
+  border: 2px solid #1a1a2e;
+  box-shadow: 0 0 4px #c9a84c88;
+  transition: background 0.2s;
+}
+
+.slider-group input[type="range"]::-webkit-slider-thumb:hover {
+  background: #e0c068;
+}
+
+.slider-group input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    #c9a84c var(--val, 50%),
+    #0f3460 var(--val, 50%)
+  );
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — ADD FORM
+   ============================================================ */
+.add-form {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 0.7fr auto;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: end;
+}
+
+.add-form button {
+  background: #c9a84c;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.add-form button:hover { background: #e0c068; }
+
+/* ============================================================
+   INITIATIVE TRACKER — ROUND COUNTER
+   ============================================================ */
+.round-counter {
+  font-size: 0.85rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — SKIP MESSAGE
+   ============================================================ */
+.skip-message {
+  background: #3d2a00;
+  border: 1px solid #c9a84c66;
+  border-radius: 8px;
+  color: #f0c040;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — TOKEN TYPE PICKER
+   ============================================================ */
+.token-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  max-width: 100%;
+}
+
+.token-option {
+  flex: 0 1 auto;
+  min-width: 48px;
+}
+
+.token-picker-label {
+  font-size: 0.8rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+.token-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: transparent;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #888;
+  font-size: 0.7rem;
+  min-width: 54px;
+}
+
+.token-option i { font-size: 1.2rem; }
+.token-option:hover { border-color: #c9a84c44; color: #c9a84c; }
+.token-option.selected { color: #e0e0e0; }
+
+/* ============================================================
+   INITIATIVE TRACKER — COMBATANT LIST
+   ============================================================ */
+.combatant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.combatant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0f3460;
+  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  transition: border 0.2s, background 0.2s;
+}
+
+.combatant.active {
+  border-color: #c9a84c;
+  background: #1a2e50;
+  box-shadow: 0 0 8px #c9a84c22;
+}
+
+.combatant.dead { opacity: 0.5; }
+
+.combatant-name {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.dead-label {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — INITIATIVE BADGE
+   ============================================================ */
+.initiative-badge {
+  background: #c9a84c22;
+  color: #c9a84c;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  border: 1px solid #c9a84c44;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — COMBATANT TOKEN CIRCLE
+   ============================================================ */
+.combatant-token {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — STATUS EFFECTS
+   ============================================================ */
+.effects-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  flex: 1;
+}
+
+.effect-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.effect-badge:hover { opacity: 0.6; }
+
+/* + button to open effect menu */
+.add-effect-btn {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #c9a84c44;
+  color: #c9a84c;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.add-effect-btn:hover {
+  background: #c9a84c;
+  color: #1a1a2e;
+}
+
+/* Wrapper needed for dropdown positioning */
+.effect-menu-wrapper { position: relative; }
+
+/* Status effect dropdown panel */
+.effect-dropdown {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  background: #16213e;
+  border: 1px solid #c9a84c44;
+  border-radius: 8px;
+  z-index: 100;
+  min-width: 180px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px #00000066;
+}
+
+/* Each row in the status effect dropdown */
+.effect-option {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: #e0e0e0;
+  border: none;
+  border-bottom: 1px solid #c9a84c11;
+  padding: 8px 12px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+.effect-option:hover { background: #0f3460; }
+
+/* Label shown next to effects that skip turns */
+.skips-label {
+  color: #f0c040;
+  font-size: 0.75rem;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — HP CONTROLS
+   ============================================================ */
+.hp-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.hp-controls button {
+  background: #16213e;
+  color: #c9a84c;
+  border: 1px solid #c9a84c44;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.hp-controls button:hover {
+  background: #c9a84c;
+  color: #1a1a2e;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — REMOVE BUTTON
+   ============================================================ */
+.remove-btn {
+  background: transparent;
+  color: #ff6b6b55;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.remove-btn:hover {
+  color: #ff6b6b;
+  background: #ff6b6b11;
+}
+
+/* ============================================================
+   INITIATIVE TRACKER — COMBAT ACTION BUTTONS
+   ============================================================ */
+.combat-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.next-btn {
+  background: #c9a84c;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.next-btn:hover { background: #e0c068; }
+
+.reset-btn {
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b44;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.reset-btn:hover { background: #ff6b6b22; }
+
+/* ============================================================
+   BATTLE MAP — LAYOUT
+   ============================================================ */
+.map-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* ============================================================
+   BATTLE MAP — PAINT TOOLBAR
+   ============================================================ */
+.map-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #0f3460;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  color: #888;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  min-width: 54px;
+  transition: all 0.2s;
+}
+
+.tool-btn span:first-child { font-size: 1.1rem; }
+.tool-btn:hover { border-color: #c9a84c44; color: #e0e0e0; }
+.tool-btn.active { border-color: #c9a84c; background: #c9a84c22; color: #c9a84c; }
+
+/* ============================================================
+   BATTLE MAP — GENERATE MAP BUTTON & DROPDOWN
+   ============================================================ */
+.generate-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.generate-wrapper {
+  position: relative;
+}
+
+.generate-main-btn {
+  background: #0f3460;
+  color: #c9a84c;
+  border: 1px solid #c9a84c44;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.generate-main-btn:hover {
+  background: #c9a84c;
+  color: #1a1a2e;
+}
+
+.generate-dropdown {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  background: #16213e;
+  border: 1px solid #c9a84c44;
+  border-radius: 10px;
+  z-index: 200;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 400px;
+  box-shadow: 0 4px 24px #00000088;
+}
+
+.generate-dropdown-title {
+  width: 100%;
+  font-size: 0.75rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.generate-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f3460;
+  color: #e0e0e0;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.generate-option:hover {
+  background: #c9a84c;
+  color: #1a1a2e;
+  border-color: #c9a84c;
+}
+
+/* ============================================================
+   BATTLE MAP — RANGE BANNER
+   ============================================================ */
+.range-banner {
+  background: #0f3460;
+  border: 1px solid #c9a84c44;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+.range-banner strong { color: #c9a84c; }
+
+.height-note {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   BATTLE MAP — SIDEBAR
+   ============================================================ */
+.map-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 130px;
+  max-width: 130px;
+  max-height: calc(14 * 40px + 2px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+/* Slim gold scrollbar */
+.map-sidebar::-webkit-scrollbar { width: 4px; }
+.map-sidebar::-webkit-scrollbar-track { background: #0f3460; border-radius: 2px; }
+.map-sidebar::-webkit-scrollbar-thumb { background: #c9a84c44; border-radius: 2px; }
+.map-sidebar::-webkit-scrollbar-thumb:hover { background: #c9a84c; }
+
+.sidebar-section-label {
+  font-size: 0.75rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.sidebar-empty {
+  font-size: 0.75rem;
+  color: #556;
+  font-style: italic;
+}
+
+.sidebar-token {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f3460;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: grab;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.sidebar-token:hover { border-color: #c9a84c44; }
+.sidebar-token.active { border-color: #c9a84c; background: #1a2e50; }
+.sidebar-token.on-map { opacity: 0.5; }
+
+.token-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+.sidebar-token-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terrain-badge { font-size: 0.7rem; }
+
+.on-map-label {
+  font-size: 0.65rem;
+  color: #c9a84c;
+  white-space: nowrap;
+}
+
+.sidebar-obstacle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0f3460;
+  border: 1px solid #c9a84c22;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: grab;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.sidebar-obstacle:hover { border-color: #c9a84c44; }
+
+/* ============================================================
+   BATTLE MAP — GRID WRAPPER & GRID
+   ============================================================ */
+.map-grid-wrapper {
+  overflow: auto;
+  flex: 1;
+  width: calc(14 * 40px);
+  height: calc(14 * 40px);
+  min-width: calc(14 * 40px);
+  min-height: calc(14 * 40px);
+  max-width: calc(14 * 40px);
+  max-height: calc(14 * 40px);
+  border: 1px solid #c9a84c22;
+  border-radius: 4px;
+}
+
+.map-grid {
+  display: grid;
+  user-select: none;
+  gap: 0;
+  line-height: 0;
+  font-size: 0;
+}
+
+/* Individual grid cell */
+.map-cell {
+  width: 40px;
+  height: 40px;
+  border-right: 1px solid #c9a84c11;
+  border-bottom: 1px solid #c9a84c11;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  transition: background 0.1s;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.map-cell:hover { border-color: #c9a84c33; }
+
+/* Highlighted cell when measuring range */
+.map-cell.range-highlight {
+  border-color: #c9a84c !important;
+  box-shadow: inset 0 0 6px #c9a84c44;
+}
+
+/* Terrain label hidden — colors are enough */
+.cell-terrain-label { display: none; }
+
+/* Obstacle emoji on grid */
+.cell-obstacle {
+  font-size: 1.2rem;
+  cursor: grab;
+  z-index: 2;
+  line-height: 1;
+}
+
+/* ============================================================
+   BATTLE MAP — GRID TOKENS
+   ============================================================ */
+.grid-token {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  position: absolute;
+  z-index: 3;
+  transition: box-shadow 0.2s;
+}
+
+.grid-token:hover { z-index: 4; transform: scale(1.1); }
+
+/* White outline when selected for range measurement */
+.grid-token.selected {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   BATTLE MAP — LEGEND
+   ============================================================ */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #c9a84c11;
+}
+
+.legend-item {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: #e0e0e0;
+  border: 1px solid #ffffff11;
+}
+/* ============================================================
+   BOTTOM ROW LAYOUT (map + side panel)
+   ============================================================ */
+.bottom-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.map-column {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================================
+   SIDE PANEL
+   ============================================================ */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 220px;
+  min-width: 220px;
+  background: #16213e;
+  border-radius: 12px;
+  border: 1px solid #c9a84c22;
+  overflow: hidden;
+}
+
+.side-panel-section {
+  padding: 16px;
+  border-bottom: 1px solid #c9a84c11;
+}
+
+.side-panel-section:last-child {
+  border-bottom: none;
+}
+
+.side-panel-title {
+  color: #c9a84c;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   TURN TIMER
+   ============================================================ */
+.timer-display {
+  font-size: 2.8rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-bar-bg {
+  background: #0f3460;
+  border-radius: 4px;
+  height: 6px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.timer-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s linear, background 0.3s;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.timer-btn {
+  flex: 1;
+  background: #0f3460;
+  color: #e0e0e0;
+  border: 1px solid #c9a84c33;
+  border-radius: 8px;
+  padding: 7px 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.timer-btn:hover {
+  background: #c9a84c;
+  color: #1a1a2e;
+}
+
+.timer-reset {
+  color: #ff6b6b;
+  border-color: #ff6b6b33;
+}
+
+.timer-reset:hover {
+  background: #ff6b6b;
+  color: #1a1a2e;
+}
+
+.timer-presets {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.timer-preset-btn {
+  flex: 1;
+  background: #0f3460;
+  color: #888;
+  border: 1px solid #c9a84c22;
+  border-radius: 6px;
+  padding: 5px 0;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+
+.timer-preset-btn:hover { color: #e0e0e0; border-color: #c9a84c44; }
+.timer-preset-btn.active { color: #c9a84c; border-color: #c9a84c; }
+
+.timer-note {
+  font-size: 0.65rem;
+  color: #556;
+  text-align: center;
+}
+
+/* ============================================================
+   DICE ROLLER
+   ============================================================ */
+.dice-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.die-btn {
+  background: #0f3460;
+  color: #888;
+  border: 1px solid #c9a84c22;
+  border-radius: 6px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.die-btn:hover { color: #e0e0e0; border-color: #c9a84c44; }
+.die-btn.active { color: #c9a84c; border-color: #c9a84c; background: #c9a84c22; }
+
+.dice-config {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dice-config-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dice-config-group label {
+  font-size: 0.7rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.dice-count-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f3460;
+  border: 1px solid #c9a84c22;
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+
+.dice-count-controls button {
+  background: transparent;
+  color: #c9a84c;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.dice-count-controls button:hover { color: #e0c068; }
+
+.dice-count-controls span {
+  font-size: 0.85rem;
+  color: #e0e0e0;
+  min-width: 24px;
+  text-align: center;
+}
+
+.advantage-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.adv-btn {
+  flex: 1;
+  background: #0f3460;
+  color: #888;
+  border: 1px solid #c9a84c22;
+  border-radius: 6px;
+  padding: 5px 0;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+
+.adv-btn:hover { color: #e0e0e0; }
+.adv-btn.active { color: #c9a84c; border-color: #c9a84c; background: #c9a84c22; }
+
+.roll-btn {
+  width: 100%;
+  background: #c9a84c;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  margin-bottom: 12px;
+}
+
+.roll-btn:hover { background: #e0c068; }
+
+.roll-result {
+  background: #0f3460;
+  border: 1px solid #c9a84c44;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.roll-total {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #c9a84c;
+  line-height: 1;
+}
+
+.roll-formula {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.roll-breakdown {
+  font-size: 0.75rem;
+  color: #c9a84c88;
+  margin-top: 4px;
+}
+
+.roll-history {
+  border-top: 1px solid #c9a84c11;
+  padding-top: 8px;
+}
+
+.roll-history-title {
+  font-size: 0.7rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.roll-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  border-bottom: 1px solid #c9a84c0a;
+  font-size: 0.8rem;
+}
+
+.roll-history-formula { color: #888; }
+.roll-history-total { color: #c9a84c; font-weight: bold; }
+.side-panel-header {
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #c9a84c22;
+  font-weight: 600;
+}
+.roll-history-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.roll-history-breakdown {
+  font-size: 0.65rem;
+  color: #556;
+}
+.remove-from-map-btn {
+  background: transparent;
+  color: #ff6b6b55;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.remove-from-map-btn:hover {
+  color: #ff6b6b;
+  background: #ff6b6b11;
+}
