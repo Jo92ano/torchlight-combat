@@ -403,33 +403,80 @@ input[type="number"] { -moz-appearance: textfield; }
 /* ============================================================
    INITIATIVE TRACKER — HP CONTROLS
    ============================================================ */
-.hp-controls {
+/* ============================================================
+   HP SYSTEM
+   ============================================================ */
+.hp-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hp-display {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 3px;
   font-size: 0.9rem;
 }
 
-.hp-controls button {
-  background: #16213e;
-  color: #c9a84c;
-  border: 1px solid #c9a84c44;
-  border-radius: 6px;
-  width: 28px;
-  height: 28px;
+.hp-current {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.hp-slash { color: #556; }
+
+.hp-max {
+  color: #888;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.hp-max:hover { color: #c9a84c; }
+
+.temp-hp-badge {
+  background: #1a4a8a;
+  color: #88aaff;
+  border: 1px solid #88aaff44;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  padding: 1px 5px;
+  font-weight: bold;
+}
+
+/* Always visible action buttons */
+.hp-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 3px;
+}
+
+.hp-quick-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 2px 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
   transition: all 0.2s;
+  line-height: 1.4;
 }
 
-.hp-controls button:hover {
-  background: #c9a84c;
-  color: #1a1a2e;
+.hp-quick-btn.damage:hover {
+  background: #3d1a1a;
+  border-color: #ff6b6b33;
 }
 
+.hp-quick-btn.heal:hover {
+  background: #1a3d1a;
+  border-color: #4caf5033;
+}
+
+.hp-quick-btn.temp:hover {
+  background: #1a2a4a;
+  border-color: #88aaff33;
+}
 /* ============================================================
    INITIATIVE TRACKER — REMOVE BUTTON
    ============================================================ */
@@ -1149,4 +1196,82 @@ input[type="number"] { -moz-appearance: textfield; }
 .remove-from-map-btn:hover {
   color: #ff6b6b;
   background: #ff6b6b11;
+}
+/* Inline HP panel */
+.hp-inline-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #0f3460;
+  border: 1px solid #c9a84c33;
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-width: 180px;
+}
+
+.hp-inline-label {
+  font-size: 0.75rem;
+  color: #c9a84c;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.hp-inline-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.hp-inline-input {
+  flex: 1;
+  background: #16213e;
+  border: 1px solid #c9a84c33;
+  border-radius: 6px;
+  color: #e0e0e0;
+  padding: 6px 10px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.hp-inline-input:focus {
+  border-color: #c9a84c;
+  outline: none;
+}
+
+.hp-inline-confirm {
+  background: #1a3d1a;
+  color: #4caf50;
+  border: 1px solid #4caf5033;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.hp-inline-confirm:hover {
+  background: #4caf50;
+  color: #1a1a2e;
+}
+
+.hp-inline-cancel {
+  background: transparent;
+  color: #ff6b6b55;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.hp-inline-cancel:hover {
+  color: #ff6b6b;
+  background: #ff6b6b11;
+}
+
+.hp-quick-btn.active {
+  background: #c9a84c22;
+  border-color: #c9a84c44;
 }

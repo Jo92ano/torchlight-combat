@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 // ============================================================
-// TOKEN OPTIONS
-// Each token has a label, RPG Awesome icon class, and a color
-// The DM picks one when adding a combatant
-// ============================================================
-const TOKENS = [
-  { id: 'warrior',  label: 'Warrior',  icon: 'ra-sword',        color: '#c9a84c' },
-  { id: 'caster',   label: 'Caster',   icon: 'ra-fairy-wand',   color: '#9b59b6' },
-  { id: 'ranger',   label: 'Ranger',   icon: 'ra-archer',        color: '#4caf50' },
-  { id: 'tank',     label: 'Tank',     icon: 'ra-shield',       color: '#5588cc' },
-  { id: 'undead',   label: 'Undead',   icon: 'ra-skull',        color: '#aaaaaa' },
-  { id: 'beast',    label: 'Beast',    icon: 'ra-wolf-head', color: '#8b5e3c' },
-  { id: 'boss',     label: 'Boss',     icon: 'ra-dragon',       color: '#e74c3c' },
-  { id: 'npc',      label: 'NPC',      icon: 'ra-hood',         color: '#888' },
-];
-
-// ============================================================
 // STATUS EFFECT DEFINITIONS
 // Each effect has:
 //   label         - display name
@@ -37,6 +21,21 @@ const STATUS_EFFECTS = {
 };
 
 // ============================================================
+// TOKEN OPTIONS
+// Each token has a label, RPG Awesome icon class, and a color
+// ============================================================
+const TOKENS = [
+  { id: 'warrior',  label: 'Warrior',  icon: 'ra-sword',        color: '#c9a84c' },
+  { id: 'caster',   label: 'Caster',   icon: 'ra-fairy-wand',   color: '#9b59b6' },
+  { id: 'ranger',   label: 'Ranger',   icon: 'ra-archer',       color: '#4caf50' },
+  { id: 'tank',     label: 'Tank',     icon: 'ra-shield',       color: '#5588cc' },
+  { id: 'undead',   label: 'Undead',   icon: 'ra-skull',        color: '#aaaaaa' },
+  { id: 'beast',    label: 'Beast',    icon: 'ra-wolf-head',    color: '#8b5e3c' },
+  { id: 'boss',     label: 'Boss',     icon: 'ra-dragon',       color: '#e74c3c' },
+  { id: 'npc',      label: 'NPC',      icon: 'ra-hood',         color: '#888' },
+];
+
+// ============================================================
 // MAIN INITIATIVE TRACKER COMPONENT
 // ============================================================
 function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) {
@@ -47,12 +46,25 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
   const [hp, setHp]                     = useState('');
   const [selectedToken, setSelectedToken] = useState('warrior');
 
-  // ---- State: whose turn it is (index in sorted list) ----
-
-
   // ---- State: which combatant's status menu is open ----
   const [openStatusMenu, setOpenStatusMenu] = useState(null);
-  // ---- Close status menu when clicking outside ----
+
+  // ---- State: skip message shown when a turn is auto-skipped ----
+  const [skipMessage, setSkipMessage]   = useState('');
+
+  // ---- State: current round number ----
+  const [round, setRound]               = useState(1);
+
+  // ---- State: which combatant's HP editor is open ----
+  const [openHpEditor, setOpenHpEditor] = useState(null);
+
+  // ---- State: damage/heal input value ----
+  const [hpInput, setHpInput]           = useState('');
+
+
+  // ============================================================
+  // CLOSE STATUS MENU WHEN CLICKING OUTSIDE
+  // ============================================================
   useEffect(() => {
     const handleClick = (e) => {
       if (!e.target.closest('.effect-menu-wrapper')) {
@@ -62,13 +74,16 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
-
-  // ---- State: skip message shown when a turn is auto-skipped ----
-  const [skipMessage, setSkipMessage]   = useState('');
-
-  // ---- State: current round number ----
-  const [round, setRound]               = useState(1);
-
+// ---- Close HP editor when clicking outside ----
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (!e.target.closest('.hp-section')) {
+        setOpenHpEditor(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   // ============================================================
   // ADD A NEW COMBATANT
@@ -84,8 +99,9 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
       initiative: parseInt(initiative),
       hp:         Math.min(999, parseInt(hp) || 10),
       maxHp:      Math.min(999, parseInt(hp) || 10),
+      tempHp:     0,
       effects:    [],
-      token,                          // store the full token object
+      token,
     };
 
     const updated = [...combatants, newCombatant]
@@ -100,15 +116,15 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
 
   // ============================================================
   // NEXT TURN LOGIC
-  // Handles auto-skip and round tracking
+  // Handles auto-skip for dead and status-effected combatants
   // ============================================================
   const nextTurn = () => {
     if (combatants.length === 0) return;
 
-    let next    = (currentTurn + 1) % combatants.length;
-    let looped  = next === 0;
+    let next   = (currentTurn + 1) % combatants.length;
+    let looped = next === 0;
 
-    // ---- Tick down effects at the start of a new round ----
+    // ---- Tick down effects at start of new round ----
     let updatedCombatants = combatants.map(c => {
       if (!looped) return c;
 
@@ -125,7 +141,6 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
     if (looped) setRound(r => r + 1);
 
     // ---- Check if next combatant should be auto-skipped ----
-    // Skips dead combatants AND combatants with skip effects
     const nextCombatant  = updatedCombatants[next];
     const skippingEffect = nextCombatant?.effects.find(
       e => STATUS_EFFECTS[e.type]?.skipsTurn
@@ -182,14 +197,69 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
 
 
   // ============================================================
-  // CHANGE HP (positive = heal, negative = damage)
+  // APPLY DAMAGE
+  // Hits temp HP first, then real HP
   // ============================================================
-  const changeHp = (id, amount) => {
-    setCombatants(combatants.map(c =>
-      c.id === id
-        ? { ...c, hp: Math.max(0, Math.min(c.maxHp, c.hp + amount)) }
-        : c
-    ));
+  const applyDamage = (id, amount) => {
+    setCombatants(combatants.map(c => {
+      if (c.id !== id) return c;
+      const tempHp = c.tempHp || 0;
+      let damage = amount;
+      const newTempHp = Math.max(0, tempHp - damage);
+      damage = Math.max(0, damage - tempHp);
+      const newHp = Math.max(0, c.hp - damage);
+      return { ...c, hp: newHp, tempHp: newTempHp };
+    }));
+  };
+
+
+  // ============================================================
+  // APPLY HEALING
+  // Never exceeds max HP
+  // ============================================================
+  const applyHealing = (id, amount) => {
+    setCombatants(combatants.map(c => {
+      if (c.id !== id) return c;
+      return { ...c, hp: Math.min(c.maxHp, c.hp + amount) };
+    }));
+  };
+
+
+  // ============================================================
+  // SET TEMP HP
+  // New temp HP replaces old if higher
+  // ============================================================
+  const applyTempHp = (id, amount) => {
+    setCombatants(combatants.map(c => {
+      if (c.id !== id) return c;
+      return { ...c, tempHp: Math.max(c.tempHp || 0, amount) };
+    }));
+  };
+
+
+  // ============================================================
+  // EDIT MAX HP
+  // ============================================================
+  const editMaxHp = (id, newMax) => {
+    setCombatants(combatants.map(c => {
+      if (c.id !== id) return c;
+      const clampedMax = Math.max(1, newMax);
+      return { ...c, maxHp: clampedMax, hp: Math.min(c.hp, clampedMax) };
+    }));
+  };
+
+
+
+
+
+  // ============================================================
+  // GET HP COLOR based on percentage
+  // ============================================================
+  const getHpColor = (hp, maxHp) => {
+    const pct = hp / maxHp;
+    if (pct > 0.5) return '#c9a84c';
+    if (pct > 0.25) return '#ff9900';
+    return '#ff4444';
   };
 
 
@@ -282,7 +352,6 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
             onClick={() => setSelectedToken(token.id)}
             title={token.label}
           >
-            {/* RPG Awesome icon */}
             <i className={`ra ${token.icon}`} style={{ color: selectedToken === token.id ? token.color : '#888' }} />
             <span>{token.label}</span>
           </button>
@@ -310,10 +379,7 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
                   style={{ background: c.token.color + '22', border: `1px solid ${c.token.color}66` }}
                   title={c.token.label}
                 >
-                  <i
-                    className={`ra ${c.token.icon}`}
-                    style={{ color: c.token.color }}
-                  />
+                  <i className={`ra ${c.token.icon}`} style={{ color: c.token.color }} />
                 </div>
 
                 {/* -- Name -- */}
@@ -325,7 +391,7 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
                 {/* -- Initiative badge -- */}
                 <span className="initiative-badge">{c.initiative}</span>
 
-                {/* -- Status effect badges -- */}
+                {/* -- Status effects -- */}
                 <div className="effects-row">
                   {c.effects.map(e => {
                     const def = STATUS_EFFECTS[e.type];
@@ -370,15 +436,124 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
                   </div>
                 </div>
 
-                {/* -- HP controls -- */}
-                <div className="hp-controls">
-                  <button onClick={() => changeHp(c.id, -1)}>−</button>
-                  <span>{c.hp} / {c.maxHp}</span>
-                  <button onClick={() => changeHp(c.id, 1)}>+</button>
+                {/* -- HP Section -- */}
+                <div className="hp-section">
+
+                  {/* HP display */}
+                  <div className="hp-display">
+                    <span
+                      className="hp-current"
+                      style={{ color: getHpColor(c.hp, c.maxHp) }}
+                    >
+                      {c.hp}
+                    </span>
+                    <span className="hp-slash">/</span>
+                    <span
+                      className="hp-max"
+                      title="Click to edit max HP"
+                      onClick={() => setOpenHpEditor(
+                        openHpEditor === `max-${c.id}` ? null : `max-${c.id}`
+                      )}
+                    >
+                      {c.maxHp}
+                    </span>
+                    {(c.tempHp || 0) > 0 && (
+                      <span className="temp-hp-badge">+{c.tempHp}</span>
+                    )}
+                  </div>
+
+                  {/* Always visible action buttons */}
+                  <div className="hp-actions">
+                    <button
+                      className={`hp-quick-btn damage ${openHpEditor === `dmg-${c.id}` ? 'active' : ''}`}
+                      onClick={() => setOpenHpEditor(
+                        openHpEditor === `dmg-${c.id}` ? null : `dmg-${c.id}`
+                      )}
+                      title="Deal damage"
+                    >🗡️</button>
+                    <button
+                      className={`hp-quick-btn heal ${openHpEditor === `heal-${c.id}` ? 'active' : ''}`}
+                      onClick={() => setOpenHpEditor(
+                        openHpEditor === `heal-${c.id}` ? null : `heal-${c.id}`
+                      )}
+                      title="Heal"
+                    >❤️</button>
+                    <button
+                      className={`hp-quick-btn temp ${openHpEditor === `temp-${c.id}` ? 'active' : ''}`}
+                      onClick={() => setOpenHpEditor(
+                        openHpEditor === `temp-${c.id}` ? null : `temp-${c.id}`
+                      )}
+                      title="Add temp HP"
+                    >🛡️</button>
+                  </div>
+
+                  {/* Inline HP input panel */}
+                  {openHpEditor && openHpEditor.endsWith(c.id.toString()) && (
+                    <div className="hp-inline-panel">
+                      <span className="hp-inline-label">
+                        {openHpEditor.startsWith('dmg')  && `Damage ${c.name}`}
+                        {openHpEditor.startsWith('heal') && `Heal ${c.name}`}
+                        {openHpEditor.startsWith('temp') && `Temp HP for ${c.name}`}
+                        {openHpEditor.startsWith('max')  && `Max HP for ${c.name}`}
+                      </span>
+                      <div className="hp-inline-row">
+                        <input
+                          type="number"
+                          className="hp-inline-input"
+                          placeholder="0"
+                          value={hpInput}
+                          onChange={e => setHpInput(e.target.value)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') {
+                              const amt = parseInt(hpInput);
+                              if (!isNaN(amt) && amt > 0) {
+                                if (openHpEditor.startsWith('dmg'))  applyDamage(c.id, amt);
+                                if (openHpEditor.startsWith('heal')) applyHealing(c.id, amt);
+                                if (openHpEditor.startsWith('temp')) applyTempHp(c.id, amt);
+                                if (openHpEditor.startsWith('max'))  editMaxHp(c.id, amt);
+                              }
+                              setHpInput('');
+                              setOpenHpEditor(null);
+                            }
+                            if (e.key === 'Escape') {
+                              setHpInput('');
+                              setOpenHpEditor(null);
+                            }
+                          }}
+                          autoFocus
+                        />
+                        <button
+                          className="hp-inline-confirm"
+                          onClick={() => {
+                            const amt = parseInt(hpInput);
+                            if (!isNaN(amt) && amt > 0) {
+                              if (openHpEditor.startsWith('dmg'))  applyDamage(c.id, amt);
+                              if (openHpEditor.startsWith('heal')) applyHealing(c.id, amt);
+                              if (openHpEditor.startsWith('temp')) applyTempHp(c.id, amt);
+                              if (openHpEditor.startsWith('max'))  editMaxHp(c.id, amt);
+                            }
+                            setHpInput('');
+                            setOpenHpEditor(null);
+                          }}
+                        >✓</button>
+                        <button
+                          className="hp-inline-cancel"
+                          onClick={() => {
+                            setHpInput('');
+                            setOpenHpEditor(null);
+                          }}
+                        >✕</button>
+                      </div>
+                    </div>
+                  )}
+
                 </div>
 
                 {/* -- Remove button -- */}
-                <button className="remove-btn" onClick={() => removeCombatant(c.id)}>✕</button>
+                <button
+                  className="remove-btn"
+                  onClick={() => removeCombatant(c.id)}
+                >✕</button>
 
               </div>
             ))}
@@ -386,8 +561,12 @@ function Initiative({ combatants, setCombatants, currentTurn, setCurrentTurn }) 
 
           {/* ---- Combat Actions ---- */}
           <div className="combat-actions">
-            <button className="next-btn" onClick={nextTurn}>Next Turn ▶</button>
-            <button className="reset-btn" onClick={resetCombat}>Reset Combat</button>
+            <button className="next-btn" onClick={nextTurn}>
+              Next Turn ▶
+            </button>
+            <button className="reset-btn" onClick={resetCombat}>
+              Reset Combat
+            </button>
           </div>
         </>
       )}
