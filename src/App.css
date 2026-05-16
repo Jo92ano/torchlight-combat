@@ -1583,3 +1583,25 @@ input[type="number"] { -moz-appearance: textfield; }
 .init-popup-row .party-cancel-btn {
   padding: 8px 10px;
 }
+/* Editable initiative badge */
+.initiative-badge.editable {
+  cursor: pointer;
+}
+
+.initiative-badge.editable:hover {
+  background: #c9a84c44;
+  border-color: #c9a84c;
+}
+
+.initiative-edit-input {
+  width: 48px;
+  background: #0f3460;
+  border: 1px solid #c9a84c;
+  border-radius: 6px;
+  color: #c9a84c;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 2px 4px;
+  outline: none;
+}

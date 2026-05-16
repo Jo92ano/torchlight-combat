@@ -171,7 +171,7 @@ function PartyManager({ onAddToCombat }) {
       onAddToCombat({
         id:         Date.now() + Math.random(),
         name:       member.name,
-        initiative: rollInitiative(),
+        initiative: 0,
         hp:         member.maxHp,
         maxHp:      member.maxHp,
         tempHp:     0,
