@@ -44,6 +44,9 @@ function DiceRoller() {
   // ---- Roll history ----
   const [history, setHistory] = useState([]);
 
+  // ---- Clear roll history ----
+  const clearHistory = () => setHistory([]);
+
 
   // ============================================================
   // ROLL THE DICE
@@ -165,7 +168,10 @@ function DiceRoller() {
       {/* ---- Roll history ---- */}
       {history.length > 0 && (
         <div className="roll-history">
-          <div className="roll-history-title">History</div>
+          <div className="roll-history-title">
+            History
+            <button className="roll-history-clear" onClick={clearHistory}>✕ Clear</button>
+          </div>
           {history.map((h, i) => (
             <div key={i} className="roll-history-item">
               <div className="roll-history-left">
