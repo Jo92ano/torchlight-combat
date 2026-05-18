@@ -1395,3 +1395,86 @@ input[type="number"] { -moz-appearance: textfield; }
   border-color: var(--blue);
   color: var(--blue);
 }
+/* ============================================================
+   PLAYER VIEW
+   ============================================================ */
+.player-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 0 20px;
+}
+
+.player-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.player-view-title {
+  font: 700 13px/1 'Cinzel';
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.player-view-sub {
+  font: 500 11px/1 'Inter';
+  color: var(--text-faint);
+}
+
+.player-view-map-wrap {
+  background: linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* ---- Fog overlay — fully hidden cells ---- */
+.player-view-fog {
+  position: absolute;
+  inset: 0;
+  background: #060b14;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ---- Dim overlay — darkvision cells ---- */
+.player-view-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(6,11,20,.55);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ---- Legend ---- */
+.player-view-legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.player-view-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 11px/1 'Inter';
+  color: var(--text-faint);
+}
+
+.player-view-legend-swatch {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+/* ---- Player view tokens — larger and more visible ---- */
+.player-view .grid-token {
+  width: 34px;
+  height: 34px;
+}

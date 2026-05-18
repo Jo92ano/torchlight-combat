@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import MapImageImporter, { useMapImage } from './MapImageImporter';
+import MapImageImporter from './MapImageImporter';
 
 // ============================================================
 // CONSTANTS
@@ -318,12 +318,13 @@ function BattleMap({
   setObstacles,
   tokenPositions,
   setTokenPositions,
+  mapImage,
+  setMapImage,
 }) {
 
   // ---- UI-only state stays local ----
   const [activeTool, setActiveTool]                 = useState('select');
   const [showImageImporter, setShowImageImporter]   = useState(false);
-  const [mapImage, setMapImage]                     = useMapImage();
   const isPainting                                  = useRef(false);
   const [rangeSelection, setRangeSelection]         = useState([]);
   const [dragging, setDragging]                     = useState(null);
@@ -729,9 +730,11 @@ function BattleMap({
                           key={c.id}
                           className={`grid-token ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''} ${c.hp === 0 ? 'dead' : ''}`}
                           style={{
-                            background: c.token.color + '33',
-                            border: `2px solid ${c.token.color}`,
-                            boxShadow: isActive ? `0 0 8px ${c.token.color}` : 'none',
+                            background: c.token.color + 'CC',
+                            border: `3px solid #fff`,
+                            boxShadow: isActive
+                              ? `0 0 0 2px ${c.token.color}, 0 0 14px ${c.token.color}`
+                              : `0 0 0 2px ${c.token.color}`,
                             opacity: c.hp === 0 ? 0.4 : 1,
                           }}
                           draggable
@@ -741,7 +744,7 @@ function BattleMap({
                         >
                           {c.hp === 0
                             ? <span style={{ fontSize: '0.9rem' }}>💀</span>
-                            : <i className={`ra ${c.token.icon}`} style={{ color: c.token.color, fontSize: '0.9rem' }} />
+                            : <i className={`ra ${c.token.icon}`} style={{ color: '#fff', fontSize: '1rem', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,.8))' }} />
                           }
                         </div>
                       );
