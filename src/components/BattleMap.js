@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import MapImageImporter, { useMapImage } from './MapImageImporter';
 
 // ============================================================
 // CONSTANTS
@@ -62,7 +63,6 @@ const OBSTACLE_TYPES = [
   { id: 'door_hidden',    label: 'Hidden door',   icon: '🚪', blocks: true,  hidden: true  },
   { id: 'door_secret',    label: 'Secret door',   icon: '🔍', blocks: false, hidden: true  },
   { id: 'trap',           label: 'Trap',          icon: '⚠️', blocks: false, hidden: true  },
-  { id: 'trap_hidden',    label: 'Hidden Trap',   icon: '🔴', blocks: false, hidden: true  },
   { id: 'web',            label: 'Web',           icon: '🕸️', blocks: false, hidden: false },
   { id: 'poison_vent',    label: 'Poison Vent',   icon: '☠️', blocks: false, hidden: true  },
   { id: 'rune_trap',      label: 'Rune Trap',     icon: '⚡', blocks: false, hidden: true  },
@@ -293,6 +293,7 @@ const PAINT_TOOLS = [
   { id: 'hazard',    label: 'Hazard',    icon: '🔴' },
   { id: 'wall',      label: 'Wall',      icon: '🧱' },
   { id: 'erase',     label: 'Erase',     icon: '🧹' },
+  { id: 'image',     label: 'Image',     icon: '🖼️' },
 ];
 
 // ============================================================
@@ -321,6 +322,8 @@ function BattleMap({
 
   // ---- UI-only state stays local ----
   const [activeTool, setActiveTool]                 = useState('select');
+  const [showImageImporter, setShowImageImporter]   = useState(false);
+  const [mapImage, setMapImage]                     = useMapImage();
   const isPainting                                  = useRef(false);
   const [rangeSelection, setRangeSelection]         = useState([]);
   const [dragging, setDragging]                     = useState(null);
@@ -501,7 +504,10 @@ function BattleMap({
           <button
             key={tool.id}
             className={`tool-btn ${activeTool === tool.id ? 'active' : ''}`}
-            onClick={() => setActiveTool(tool.id)}
+            onClick={() => {
+              if (tool.id === 'image') { setShowImageImporter(true); return; }
+              setActiveTool(tool.id);
+            }}
             title={tool.label}
           >
             <span>{tool.icon}</span>
@@ -509,6 +515,15 @@ function BattleMap({
           </button>
         ))}
       </div>
+
+      {/* ---- Map Image Importer Modal ---- */}
+      <MapImageImporter
+        isOpen={showImageImporter}
+        onClose={() => setShowImageImporter(false)}
+        onImageSet={setMapImage}
+        onImageClear={() => setMapImage(null)}
+        currentImage={mapImage}
+      />
 
       {/* ---- Generate Map ---- */}
       <div className="generate-row">
@@ -635,14 +650,36 @@ function BattleMap({
         {/* ---- Grid ---- */}
         <div
           className="map-grid-wrapper"
+          style={{ position: 'relative' }}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
         >
+          {/* Background image layer — behind grid */}
+          {mapImage && (
+            <img
+              src={mapImage.src}
+              alt="Map background"
+              style={{
+                position: 'absolute',
+                top: mapImage.posY || 0,
+                left: mapImage.posX || 0,
+                transform: `scale(${(mapImage.scale || 100) / 100})`,
+                transformOrigin: 'top left',
+                zIndex: 0,
+                pointerEvents: 'none',
+                maxWidth: 'none',
+              }}
+              draggable={false}
+            />
+          )}
+
           <div
             className="map-grid"
             style={{
               gridTemplateColumns: `repeat(${COLS}, ${CELL_SIZE}px)`,
               gridTemplateRows:    `repeat(${ROWS}, ${CELL_SIZE}px)`,
+              position: 'relative',
+              zIndex: 1,
             }}
           >
             {Array(ROWS).fill(null).map((_, row) =>
