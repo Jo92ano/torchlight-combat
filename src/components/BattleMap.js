@@ -21,51 +21,56 @@ const TERRAIN_TYPES = {
 
 // ============================================================
 // OBSTACLE DEFINITIONS
+// hidden: true = DM only, filtered out on player view
 // ============================================================
 const OBSTACLE_TYPES = [
   // --- Terrain objects ---
-  { id: 'tree',           label: 'Tree',          icon: '🌲', blocks: true  },
-  { id: 'boulder',        label: 'Boulder',       icon: '🪨', blocks: true  },
-  { id: 'pillar',         label: 'Pillar',        icon: '🏛️', blocks: true  },
-  { id: 'barrel',         label: 'Barrel',        icon: '🛢️', blocks: false },
-  { id: 'table',          label: 'Table',         icon: '🪵', blocks: false },
-  { id: 'table_set',      label: 'Table (set)',   icon: '🍽️', blocks: false },
-  { id: 'fire',           label: 'Fire',          icon: '🔥', blocks: false },
-  { id: 'water',          label: 'Water',         icon: '🌊', blocks: false },
+  { id: 'tree',           label: 'Tree',          icon: '🌲', blocks: true,  hidden: false },
+  { id: 'boulder',        label: 'Boulder',       icon: '🪨', blocks: true,  hidden: false },
+  { id: 'pillar',         label: 'Pillar',        icon: '🏛️', blocks: true,  hidden: false },
+  { id: 'barrel',         label: 'Barrel',        icon: '🛢️', blocks: false, hidden: false },
+  { id: 'table',          label: 'Table',         icon: '🪵', blocks: false, hidden: false },
+  { id: 'table_set',      label: 'Table (set)',   icon: '🍽️', blocks: false, hidden: false },
+  { id: 'fire',           label: 'Fire',          icon: '🔥', blocks: false, hidden: false },
+  { id: 'water',          label: 'Water',         icon: '🌊', blocks: false, hidden: false },
   // --- Doors & Passages ---
-  { id: 'door_open',      label: 'Door (open)',   icon: '🚪', blocks: false },
-  { id: 'door_locked',    label: 'Door (locked)', icon: '🔒', blocks: true  },
-  { id: 'door_barricade', label: 'Barricaded',    icon: '🚧', blocks: true  },
-  { id: 'hole',           label: 'Hole/Passage',  icon: '🕳️', blocks: false },
-  { id: 'ladder',         label: 'Ladder/Hatch',  icon: '🪜', blocks: false },
-  { id: 'door_hidden',    label: 'Hidden door',   icon: '🚪', blocks: true  },
-  { id: 'door_secret',    label: 'Secret door',   icon: '🔍', blocks: false },
+  { id: 'door_open',      label: 'Door (open)',   icon: '🚪', blocks: false, hidden: false },
+  { id: 'door_locked',    label: 'Door (locked)', icon: '🔒', blocks: true,  hidden: false },
+  { id: 'door_barricade', label: 'Barricaded',    icon: '🚧', blocks: true,  hidden: false },
+  { id: 'hole',           label: 'Hole/Passage',  icon: '🕳️', blocks: false, hidden: false },
+  { id: 'ladder',         label: 'Ladder/Hatch',  icon: '🪜', blocks: false, hidden: false },
   // --- Windows ---
-  { id: 'window',         label: 'Window',        icon: '🪟', blocks: true  },
-  { id: 'window_open',    label: 'Window (open)', icon: '🔓', blocks: false },
+  { id: 'window',         label: 'Window',        icon: '🪟', blocks: true,  hidden: false },
+  { id: 'window_open',    label: 'Window (open)', icon: '🔓', blocks: false, hidden: false },
   // --- Light Sources ---
-  { id: 'candle',         label: 'Candle',        icon: '🕯️', blocks: false },
-  { id: 'lantern',        label: 'Lantern',       icon: '🔦', blocks: false },
-  { id: 'torch',          label: 'Wall Torch',    icon: '🪔', blocks: false },
-  { id: 'magic_light',    label: 'Magic Light',   icon: '⭐', blocks: false },
-  { id: 'darkness',       label: 'Darkness',      icon: '🌑', blocks: false },
+  { id: 'candle',         label: 'Candle',        icon: '🕯️', blocks: false, hidden: false },
+  { id: 'lantern',        label: 'Lantern',       icon: '🔦', blocks: false, hidden: false },
+  { id: 'torch',          label: 'Wall Torch',    icon: '🪔', blocks: false, hidden: false },
+  { id: 'magic_light',    label: 'Magic Light',   icon: '⭐', blocks: false, hidden: false },
+  { id: 'darkness',       label: 'Darkness',      icon: '🌑', blocks: false, hidden: false },
   // --- Furniture & Cover ---
-  { id: 'chair',          label: 'Chair',         icon: '🪑', blocks: false },
-  { id: 'bed',            label: 'Bed',           icon: '🛏️', blocks: false },
-  { id: 'mirror',         label: 'Mirror',        icon: '🪞', blocks: false },
-  { id: 'bookshelf',      label: 'Bookshelf',     icon: '📚', blocks: true  },
-  { id: 'weapon_rack',    label: 'Weapon Rack',   icon: '🗡️', blocks: false },
-  { id: 'alchemy',        label: 'Alchemy Table', icon: '⚗️', blocks: false },
+  { id: 'chair',          label: 'Chair',         icon: '🪑', blocks: false, hidden: false },
+  { id: 'bed',            label: 'Bed',           icon: '🛏️', blocks: false, hidden: false },
+  { id: 'mirror',         label: 'Mirror',        icon: '🪞', blocks: false, hidden: false },
+  { id: 'bookshelf',      label: 'Bookshelf',     icon: '📚', blocks: true,  hidden: false },
+  { id: 'weapon_rack',    label: 'Weapon Rack',   icon: '🗡️', blocks: false, hidden: false },
+  { id: 'alchemy',        label: 'Alchemy Table', icon: '⚗️', blocks: false, hidden: false },
   // --- Interactables ---
-  { id: 'chest',          label: 'Chest',         icon: '📦', blocks: false },
-  { id: 'chest_open',     label: 'Opened Chest',  icon: '🗃️', blocks: false },
-  // --- Traps & Hazards ---
-  { id: 'trap',           label: 'Trap',          icon: '⚠️', blocks: false },
-  { id: 'trap_hidden',    label: 'Hidden Trap',   icon: '🔴', blocks: false },
-  { id: 'web',            label: 'Web',           icon: '🕸️', blocks: false },
-  { id: 'poison_vent',    label: 'Poison Vent',   icon: '☠️', blocks: false },
-  { id: 'rune_trap',      label: 'Rune Trap',     icon: '⚡', blocks: false },
+  { id: 'chest',          label: 'Chest',         icon: '📦', blocks: false, hidden: false },
+  { id: 'chest_open',     label: 'Opened Chest',  icon: '🗃️', blocks: false, hidden: false },
+  // --- Hidden / DM Only ---
+  { id: 'door_hidden',    label: 'Hidden door',   icon: '🚪', blocks: true,  hidden: true  },
+  { id: 'door_secret',    label: 'Secret door',   icon: '🔍', blocks: false, hidden: true  },
+  { id: 'trap',           label: 'Trap',          icon: '⚠️', blocks: false, hidden: true  },
+  { id: 'trap_hidden',    label: 'Hidden Trap',   icon: '🔴', blocks: false, hidden: true  },
+  { id: 'web',            label: 'Web',           icon: '🕸️', blocks: false, hidden: false },
+  { id: 'poison_vent',    label: 'Poison Vent',   icon: '☠️', blocks: false, hidden: true  },
+  { id: 'rune_trap',      label: 'Rune Trap',     icon: '⚡', blocks: false, hidden: true  },
 ];
+
+// ---- Split into visible and hidden lists for the sidebar ----
+const VISIBLE_OBSTACLES = OBSTACLE_TYPES.filter(o => !o.hidden);
+const HIDDEN_OBSTACLES  = OBSTACLE_TYPES.filter(o => o.hidden);
 
 // ============================================================
 // PROCEDURAL MAP GENERATORS
@@ -81,23 +86,18 @@ const placeObstacle = (obstacles, row, col, type) => {
 const generateTavern = () => {
   const terrain = emptyTerrain();
   const obstacles = [];
-
   for (let r = 0; r < 14; r++)
     for (let c = 0; c < 14; c++)
       if (r === 0 || r === 13 || c === 0 || c === 13) terrain[r][c] = 'wall';
-
   for (let c = 2; c <= 8; c++) terrain[2][c] = 'wall';
   for (let c = 9; c <= 12; c++) terrain[4][c] = 'wall';
   for (let r = 1; r <= 4; r++) terrain[r][9] = 'wall';
-  terrain[2][9] = 'empty';
-  terrain[13][6] = 'empty';
-
+  terrain[2][9] = 'empty'; terrain[13][6] = 'empty';
   placeObstacle(obstacles, 13, 6, 'door_open');
   placeObstacle(obstacles, 2, 9, 'door_locked');
   placeObstacle(obstacles, 0, 3, 'window');
   placeObstacle(obstacles, 0, 10, 'window');
   placeObstacle(obstacles, 13, 3, 'window');
-
   const tableSpots = [[5,2],[5,5],[5,8],[8,2],[8,5],[8,8],[11,3],[11,7]];
   tableSpots.forEach(([r, c]) => {
     if (chance(80)) {
@@ -106,18 +106,13 @@ const generateTavern = () => {
       if (chance(40)) placeObstacle(obstacles, r, c+1, 'chair');
     }
   });
-
-  placeObstacle(obstacles, 3, 10, 'barrel');
-  placeObstacle(obstacles, 3, 11, 'barrel');
+  placeObstacle(obstacles, 3, 10, 'barrel'); placeObstacle(obstacles, 3, 11, 'barrel');
   placeObstacle(obstacles, 2, 11, 'chest');
   if (chance(50)) placeObstacle(obstacles, 3, 11, 'alchemy');
-  placeObstacle(obstacles, 1, 1,   'torch');
-  placeObstacle(obstacles, 1, 12,  'torch');
-  placeObstacle(obstacles, 7, 12,  'fire');
-  placeObstacle(obstacles, 12, 1,  'lantern');
-  placeObstacle(obstacles, 12, 12, 'lantern');
-  placeObstacle(obstacles, 1, 11,  'bookshelf');
-
+  placeObstacle(obstacles, 1, 1, 'torch'); placeObstacle(obstacles, 1, 12, 'torch');
+  placeObstacle(obstacles, 7, 12, 'fire');
+  placeObstacle(obstacles, 12, 1, 'lantern'); placeObstacle(obstacles, 12, 12, 'lantern');
+  placeObstacle(obstacles, 1, 11, 'bookshelf');
   return { terrain, obstacles };
 };
 
@@ -125,7 +120,6 @@ const generateTavern = () => {
 const generateCave = () => {
   const terrain = emptyTerrain();
   const obstacles = [];
-
   for (let r = 0; r < 18; r++) {
     for (let c = 0; c < 18; c++) {
       const dist = Math.min(r, c, 17 - r, 17 - c);
@@ -134,39 +128,26 @@ const generateCave = () => {
       else if (dist === 2 && chance(25)) terrain[r][c] = 'wall';
     }
   }
-
   [[4,12],[10,5],[14,13]].forEach(([pr, pc]) => {
     for (let r = pr - 1; r <= pr + 1; r++)
       for (let c = pc - 1; c <= pc + 1; c++)
         if (r > 0 && r < ROWS && c > 0 && c < COLS && terrain[r][c] !== 'wall')
           if (chance(70)) terrain[r][c] = 'low';
   });
-
   for (let r = 3; r < 15; r++)
     for (let c = 3; c < 15; c++)
       if (terrain[r][c] === 'empty' && chance(20)) terrain[r][c] = 'difficult';
-
   for (let i = 0; i < 8; i++) {
-    const r = randInt(2, 16);
-    const c = randInt(2, 16);
+    const r = randInt(2, 16); const c = randInt(2, 16);
     if (terrain[r][c] === 'empty') placeObstacle(obstacles, r, c, 'boulder');
   }
-
-  for (let i = 0; i < 3; i++)
-    placeObstacle(obstacles, randInt(1, 4), randInt(1, 4), 'web');
-
-  for (let i = 0; i < 3; i++)
-    placeObstacle(obstacles, randInt(3, 15), randInt(3, 15), 'trap_hidden');
-
+  for (let i = 0; i < 3; i++) placeObstacle(obstacles, randInt(1, 4), randInt(1, 4), 'web');
+  for (let i = 0; i < 3; i++) placeObstacle(obstacles, randInt(3, 15), randInt(3, 15), 'trap_hidden');
   if (chance(50)) placeObstacle(obstacles, randInt(5, 12), randInt(5, 12), 'poison_vent');
   if (chance(40)) placeObstacle(obstacles, randInt(5, 12), randInt(5, 12), 'rune_trap');
-
-  for (let i = 0; i < 4; i++)
-    placeObstacle(obstacles, randInt(2, 16), randInt(2, 16), 'torch');
-
+  for (let i = 0; i < 4; i++) placeObstacle(obstacles, randInt(2, 16), randInt(2, 16), 'torch');
   placeObstacle(obstacles, randInt(12, 16), randInt(12, 16), 'chest');
   placeObstacle(obstacles, randInt(1, 3), randInt(1, 3), 'ladder');
-
   return { terrain, obstacles };
 };
 
@@ -174,48 +155,30 @@ const generateCave = () => {
 const generateForest = () => {
   const terrain = emptyTerrain();
   const obstacles = [];
-
   for (let r = 0; r < 18; r++) {
     for (let c = 0; c < 18; c++) {
       const dist = Math.min(r, c, 17 - r, 17 - c);
-      if (dist <= 1) {
-        terrain[r][c] = 'wall';
-        if (chance(60)) placeObstacle(obstacles, r, c, 'tree');
-      } else if (dist === 2 && chance(40)) {
-        terrain[r][c] = 'difficult';
-        if (chance(50)) placeObstacle(obstacles, r, c, 'tree');
-      }
+      if (dist <= 1) { terrain[r][c] = 'wall'; if (chance(60)) placeObstacle(obstacles, r, c, 'tree'); }
+      else if (dist === 2 && chance(40)) { terrain[r][c] = 'difficult'; if (chance(50)) placeObstacle(obstacles, r, c, 'tree'); }
     }
   }
-
   for (let i = 0; i < 6; i++) {
-    const r = randInt(3, 14);
-    const c = randInt(3, 14);
-    if (terrain[r][c] === 'empty') {
-      terrain[r][c] = 'difficult';
-      placeObstacle(obstacles, r, c, 'tree');
-    }
+    const r = randInt(3, 14); const c = randInt(3, 14);
+    if (terrain[r][c] === 'empty') { terrain[r][c] = 'difficult'; placeObstacle(obstacles, r, c, 'tree'); }
   }
-
   for (let r = 3; r < 15; r++)
     for (let c = 3; c < 15; c++)
       if (terrain[r][c] === 'empty' && chance(15)) terrain[r][c] = 'difficult';
-
   for (let i = 0; i < 3; i++) {
-    const r = randInt(3, 14);
-    const c = randInt(3, 14);
+    const r = randInt(3, 14); const c = randInt(3, 14);
     if (terrain[r][c] !== 'wall') placeObstacle(obstacles, r, c, 'web');
   }
-
   for (let i = 0; i < 3; i++) {
-    const r = randInt(4, 13);
-    const c = randInt(4, 13);
+    const r = randInt(4, 13); const c = randInt(4, 13);
     if (terrain[r][c] === 'empty') placeObstacle(obstacles, r, c, 'trap_hidden');
   }
-
   if (chance(60)) placeObstacle(obstacles, 8, 8, 'fire');
   if (chance(50)) placeObstacle(obstacles, randInt(2, 5), randInt(2, 5), 'chest');
-
   return { terrain, obstacles };
 };
 
@@ -223,47 +186,29 @@ const generateForest = () => {
 const generateDungeon = () => {
   const terrain = emptyTerrain();
   const obstacles = [];
-
   for (let r = 0; r < 14; r++)
     for (let c = 0; c < 14; c++)
       if (r === 0 || r === 13 || c === 0 || c === 13) terrain[r][c] = 'wall';
-
-  terrain[0][6]  = 'empty';
-  terrain[13][6] = 'empty';
-  terrain[6][0]  = 'empty';
-  terrain[6][13] = 'empty';
-
+  terrain[0][6] = 'empty'; terrain[13][6] = 'empty';
+  terrain[6][0] = 'empty'; terrain[6][13] = 'empty';
   placeObstacle(obstacles, 0,  6, chance(50) ? 'door_open' : 'door_locked');
   placeObstacle(obstacles, 13, 6, 'door_open');
   placeObstacle(obstacles, 6,  0, chance(50) ? 'door_barricade' : 'door_open');
-
-  [[2,2],[2,11],[11,2],[11,11]].forEach(([r, c]) => {
-    terrain[r][c] = 'wall';
-    placeObstacle(obstacles, r, c, 'pillar');
-  });
-
-  placeObstacle(obstacles, 0,  3,  'torch');
-  placeObstacle(obstacles, 0,  10, 'torch');
-  placeObstacle(obstacles, 13, 3,  'torch');
-  placeObstacle(obstacles, 13, 10, 'torch');
-
+  [[2,2],[2,11],[11,2],[11,11]].forEach(([r, c]) => { terrain[r][c] = 'wall'; placeObstacle(obstacles, r, c, 'pillar'); });
+  placeObstacle(obstacles, 0, 3, 'torch'); placeObstacle(obstacles, 0, 10, 'torch');
+  placeObstacle(obstacles, 13, 3, 'torch'); placeObstacle(obstacles, 13, 10, 'torch');
   if (chance(60)) placeObstacle(obstacles, randInt(2, 4), randInt(2, 4), 'weapon_rack');
   if (chance(40)) placeObstacle(obstacles, randInt(2, 4), randInt(9, 11), 'bookshelf');
-
   for (let i = 0; i < randInt(1, 3); i++)
     placeObstacle(obstacles, randInt(3, 10), randInt(3, 10), chance(50) ? 'trap' : 'trap_hidden');
-
   if (chance(40)) placeObstacle(obstacles, randInt(5, 8), randInt(5, 8), 'rune_trap');
   placeObstacle(obstacles, randInt(9, 11), randInt(9, 11), 'chest');
-
   const side = randInt(0, 3);
   if (side === 0) placeObstacle(obstacles, 0,  randInt(2, 11), 'door_hidden');
   if (side === 1) placeObstacle(obstacles, 13, randInt(2, 11), 'door_hidden');
   if (side === 2) placeObstacle(obstacles, randInt(2, 11), 0,  'door_hidden');
   if (side === 3) placeObstacle(obstacles, randInt(2, 11), 13, 'door_hidden');
-
   if (chance(30)) terrain[randInt(4,8)][randInt(4,8)] = 'hazard';
-
   return { terrain, obstacles };
 };
 
@@ -271,22 +216,16 @@ const generateDungeon = () => {
 const generateTownSquare = () => {
   const terrain = emptyTerrain();
   const obstacles = [];
-
   for (let c = 0; c < 20; c++) { terrain[9][c] = 'empty'; terrain[10][c] = 'empty'; }
   for (let r = 0; r < 20; r++) { terrain[r][9] = 'empty'; terrain[r][10] = 'empty'; }
-
   const buildings = [
-    { r1:1,  c1:1,  r2:7,  c2:7  },
-    { r1:1,  c1:12, r2:7,  c2:18 },
-    { r1:12, c1:1,  r2:18, c2:7  },
-    { r1:12, c1:12, r2:18, c2:18 },
+    { r1:1, c1:1, r2:7, c2:7 }, { r1:1, c1:12, r2:7, c2:18 },
+    { r1:12, c1:1, r2:18, c2:7 }, { r1:12, c1:12, r2:18, c2:18 },
   ];
-
   buildings.forEach(({ r1, c1, r2, c2 }) => {
     for (let r = r1; r <= r2; r++)
       for (let c = c1; c <= c2; c++)
         if (r === r1 || r === r2 || c === c1 || c === c2) terrain[r][c] = 'wall';
-
     const midC = Math.floor((c1 + c2) / 2);
     terrain[r2][midC] = 'empty';
     placeObstacle(obstacles, r2, midC, 'door_open');
@@ -295,23 +234,11 @@ const generateTownSquare = () => {
     placeObstacle(obstacles, r1+2, c1+2, 'bookshelf');
     if (chance(50)) placeObstacle(obstacles, r2-2, c2-2, 'chest');
   });
-
   placeObstacle(obstacles, 9, 9, 'barrel');
-
-  [[4,8],[4,11],[15,8],[15,11],[8,4],[11,4],[8,15],[11,15]].forEach(([r,c]) => {
-    placeObstacle(obstacles, r, c, 'lantern');
-  });
-
-  [[3,9],[3,11],[16,9],[16,11],[9,3],[11,3]].forEach(([r,c]) => {
-    if (chance(70)) placeObstacle(obstacles, r, c, 'barrel');
-  });
-
-  [[2,8],[5,8],[2,11],[5,11],[14,8],[17,8],[14,11],[17,11]].forEach(([r,c]) => {
-    if (chance(60)) placeObstacle(obstacles, r, c, 'tree');
-  });
-
+  [[4,8],[4,11],[15,8],[15,11],[8,4],[11,4],[8,15],[11,15]].forEach(([r,c]) => placeObstacle(obstacles, r, c, 'lantern'));
+  [[3,9],[3,11],[16,9],[16,11],[9,3],[11,3]].forEach(([r,c]) => { if (chance(70)) placeObstacle(obstacles, r, c, 'barrel'); });
+  [[2,8],[5,8],[2,11],[5,11],[14,8],[17,8],[14,11],[17,11]].forEach(([r,c]) => { if (chance(60)) placeObstacle(obstacles, r, c, 'tree'); });
   if (chance(40)) placeObstacle(obstacles, randInt(3,7), randInt(3,7), 'trap_hidden');
-
   return { terrain, obstacles };
 };
 
@@ -319,41 +246,24 @@ const generateTownSquare = () => {
 const generateBanditCamp = () => {
   const terrain = emptyTerrain();
   const obstacles = [];
-
   for (let r = 0; r < 18; r++) {
     for (let c = 0; c < 18; c++) {
       const dist = Math.min(r, c, 17-r, 17-c);
-      if (dist <= 1 && chance(50)) {
-        terrain[r][c] = 'difficult';
-        placeObstacle(obstacles, r, c, 'tree');
-      }
+      if (dist <= 1 && chance(50)) { terrain[r][c] = 'difficult'; placeObstacle(obstacles, r, c, 'tree'); }
     }
   }
-
-  [[5,5],[5,12],[12,5],[12,12],[8,8]].forEach(([r,c]) => {
-    if (chance(70)) placeObstacle(obstacles, r, c, 'fire');
-  });
-
-  [[3,8],[3,10],[14,8],[14,10]].forEach(([r,c]) => {
-    if (chance(60)) placeObstacle(obstacles, r, c, 'lantern');
-  });
-
+  [[5,5],[5,12],[12,5],[12,12],[8,8]].forEach(([r,c]) => { if (chance(70)) placeObstacle(obstacles, r, c, 'fire'); });
+  [[3,8],[3,10],[14,8],[14,10]].forEach(([r,c]) => { if (chance(60)) placeObstacle(obstacles, r, c, 'lantern'); });
   for (let i = 0; i < 6; i++) {
-    const r = randInt(3, 15);
-    const c = randInt(3, 15);
+    const r = randInt(3, 15); const c = randInt(3, 15);
     if (terrain[r][c] === 'empty') placeObstacle(obstacles, r, c, 'barrel');
   }
-
   if (chance(70)) placeObstacle(obstacles, randInt(4,8), randInt(4,8), 'weapon_rack');
   placeObstacle(obstacles, randInt(2,5), randInt(2,5), 'chest');
   if (chance(40)) placeObstacle(obstacles, randInt(2,5), randInt(2,5), 'chest_open');
-
-  for (let i = 0; i < 4; i++)
-    placeObstacle(obstacles, randInt(2, 16), randInt(2, 16), 'trap_hidden');
-
+  for (let i = 0; i < 4; i++) placeObstacle(obstacles, randInt(2, 16), randInt(2, 16), 'trap_hidden');
   placeObstacle(obstacles, randInt(1,3), randInt(7,10), 'door_barricade');
   if (chance(40)) placeObstacle(obstacles, randInt(13,16), randInt(13,16), 'web');
-
   return { terrain, obstacles };
 };
 
@@ -368,12 +278,8 @@ const MAP_PRESETS = [
 ];
 
 const GENERATORS = {
-  tavern:  generateTavern,
-  cave:    generateCave,
-  forest:  generateForest,
-  dungeon: generateDungeon,
-  town:    generateTownSquare,
-  bandit:  generateBanditCamp,
+  tavern: generateTavern, cave: generateCave, forest: generateForest,
+  dungeon: generateDungeon, town: generateTownSquare, bandit: generateBanditCamp,
 };
 
 // ============================================================
@@ -400,26 +306,30 @@ const getTerrainEffect = (terrain) =>
 
 // ============================================================
 // MAIN BATTLE MAP COMPONENT
+// Receives map state as props from App.js
 // ============================================================
-function BattleMap({ combatants, currentTurn }) {
+function BattleMap({
+  combatants,
+  currentTurn,
+  terrain,
+  setTerrain,
+  obstacles,
+  setObstacles,
+  tokenPositions,
+  setTokenPositions,
+}) {
 
-  const [terrain, setTerrain] = useState(
-    () => Array(ROWS).fill(null).map(() => Array(COLS).fill('empty'))
-  );
-  const [obstacles, setObstacles]           = useState([]);
-  const [tokenPositions, setTokenPositions] = useState({});
-  const [activeTool, setActiveTool]         = useState('select');
-  const isPainting                          = useRef(false);
-  const [rangeSelection, setRangeSelection] = useState([]);
-  const [dragging, setDragging]             = useState(null);
+  // ---- UI-only state stays local ----
+  const [activeTool, setActiveTool]                 = useState('select');
+  const isPainting                                  = useRef(false);
+  const [rangeSelection, setRangeSelection]         = useState([]);
+  const [dragging, setDragging]                     = useState(null);
   const [showGeneratePicker, setShowGeneratePicker] = useState(false);
 
   // ---- Close generate picker on outside click ----
   useEffect(() => {
     const handleClick = (e) => {
-      if (!e.target.closest('.generate-wrapper')) {
-        setShowGeneratePicker(false);
-      }
+      if (!e.target.closest('.generate-wrapper')) setShowGeneratePicker(false);
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -445,14 +355,11 @@ function BattleMap({ combatants, currentTurn }) {
   const paintCell = useCallback((row, col) => {
     setTerrain(prev => {
       const next = prev.map(r => [...r]);
-      if (activeTool === 'erase') {
-        next[row][col] = 'empty';
-      } else if (TERRAIN_TYPES[activeTool]) {
-        next[row][col] = activeTool;
-      }
+      if (activeTool === 'erase') next[row][col] = 'empty';
+      else if (TERRAIN_TYPES[activeTool]) next[row][col] = activeTool;
       return next;
     });
-  }, [activeTool]);
+  }, [activeTool, setTerrain]);
 
 
   // ============================================================
@@ -518,7 +425,6 @@ function BattleMap({ combatants, currentTurn }) {
   const handleCellDrop = (e, row, col) => {
     e.preventDefault();
     if (!dragging) return;
-
     if (dragging.type === 'new-token' || dragging.type === 'token') {
       setTokenPositions(prev => ({ ...prev, [dragging.id]: { row, col } }));
     }
@@ -528,7 +434,6 @@ function BattleMap({ combatants, currentTurn }) {
     if (dragging.type === 'obstacle') {
       setObstacles(prev => prev.map(o => o.id === dragging.id ? { ...o, row, col } : o));
     }
-
     setDragging(null);
   };
 
@@ -553,10 +458,8 @@ function BattleMap({ combatants, currentTurn }) {
     const pos1 = tokenPositions[id1];
     const pos2 = tokenPositions[id2];
     if (!pos1 || !pos2) return null;
-
     const c1 = combatants.find(c => c.id === id1);
     const c2 = combatants.find(c => c.id === id2);
-
     let distance = calcDistance(pos1.row, pos1.col, pos2.row, pos2.col);
     const t1 = terrain[pos1.row][pos1.col];
     const t2 = terrain[pos2.row][pos2.col];
@@ -564,13 +467,7 @@ function BattleMap({ combatants, currentTurn }) {
     const h2 = t2 === 'high' ? 10 : t2 === 'low' ? -10 : 0;
     const heightDiff  = Math.abs(h1 - h2);
     const heightBonus = Math.floor(heightDiff / 10) * 5;
-
-    return {
-      name1: c1?.name || '?',
-      name2: c2?.name || '?',
-      distance: distance + heightBonus,
-      heightDiff,
-    };
+    return { name1: c1?.name || '?', name2: c2?.name || '?', distance: distance + heightBonus, heightDiff };
   };
 
   const rangeInfo = getRangeInfo();
@@ -613,7 +510,7 @@ function BattleMap({ combatants, currentTurn }) {
         ))}
       </div>
 
-      {/* ---- Generate Map Row ---- */}
+      {/* ---- Generate Map ---- */}
       <div className="generate-row">
         <div className="generate-wrapper">
           <button
@@ -622,7 +519,6 @@ function BattleMap({ combatants, currentTurn }) {
           >
             🎲 Generate Map
           </button>
-
           {showGeneratePicker && (
             <div className="generate-dropdown">
               <div className="generate-dropdown-title">Choose a map type</div>
@@ -656,12 +552,14 @@ function BattleMap({ combatants, currentTurn }) {
 
         {/* ---- Sidebar ---- */}
         <div className="map-sidebar">
+
+          {/* Combatants */}
           <div className="sidebar-section-label">Combatants</div>
           {combatants.length === 0 && (
             <div className="sidebar-empty">Add combatants in the initiative tracker</div>
           )}
           {combatants.map((c, index) => {
-            const badge    = getTerrainBadge(c.id);
+            const badge   = getTerrainBadge(c.id);
             const isActive = index === currentTurn;
             const isOnMap  = !!tokenPositions[c.id];
             return (
@@ -695,9 +593,11 @@ function BattleMap({ combatants, currentTurn }) {
             );
           })}
 
-          {/* ---- Obstacles ---- */}
-          <div className="sidebar-section-label" style={{ marginTop: 16 }}>Obstacles</div>
-          {OBSTACLE_TYPES.map(obs => (
+          {/* ---- VISIBLE OBSTACLES ---- */}
+          <div className="sidebar-section-label" style={{ marginTop: 16 }}>
+            Obstacles
+          </div>
+          {VISIBLE_OBSTACLES.map(obs => (
             <div
               key={obs.id}
               className="sidebar-obstacle"
@@ -709,6 +609,27 @@ function BattleMap({ combatants, currentTurn }) {
               <span>{obs.label}</span>
             </div>
           ))}
+
+          {/* ---- HIDDEN / DM ONLY OBSTACLES ---- */}
+          <div className="sidebar-section-label sidebar-section-label--hidden" style={{ marginTop: 16 }}>
+            👁 DM Only
+          </div>
+          <div className="sidebar-hidden-note">
+            Hidden from players on the player view
+          </div>
+          {HIDDEN_OBSTACLES.map(obs => (
+            <div
+              key={obs.id}
+              className="sidebar-obstacle sidebar-obstacle--hidden"
+              draggable
+              onDragStart={e => handleObstacleSidebarDragStart(e, obs.id)}
+              title={`DM Only — ${obs.label} is hidden from players`}
+            >
+              <span>{obs.icon}</span>
+              <span>{obs.label}</span>
+            </div>
+          ))}
+
         </div>
 
         {/* ---- Grid ---- */}
@@ -729,6 +650,7 @@ function BattleMap({ combatants, currentTurn }) {
                 const cellTerrain = terrain[row][col];
                 const terrainDef  = TERRAIN_TYPES[cellTerrain];
                 const obstacle    = obstacles.find(o => o.row === row && o.col === col);
+                const obsDef      = obstacle ? OBSTACLE_TYPES.find(o => o.id === obstacle.type) : null;
                 const tokensHere  = combatants.filter(c => {
                   const pos = tokenPositions[c.id];
                   return pos && pos.row === row && pos.col === col;
@@ -746,16 +668,18 @@ function BattleMap({ combatants, currentTurn }) {
                     onDragOver={handleCellDragOver}
                     onDrop={e => handleCellDrop(e, row, col)}
                   >
-                    {/* Obstacle */}
+                    {/* Obstacle — hidden ones get a red border on DM view */}
                     {obstacle && (
                       <span
-                        className="cell-obstacle"
+                        className={`cell-obstacle ${obsDef?.hidden ? 'cell-obstacle--hidden' : ''}`}
                         draggable
                         onDragStart={e => handleObstacleOnGridDragStart(e, obstacle.id)}
                         onContextMenu={e => handleObstacleRightClick(e, obstacle.id)}
-                        title={`${obstacle.type} — right-click to remove`}
+                        title={obsDef?.hidden
+                          ? `[DM ONLY] ${obstacle.type} — right-click to remove`
+                          : `${obstacle.type} — right-click to remove`}
                       >
-                        {OBSTACLE_TYPES.find(o => o.id === obstacle.type)?.icon}
+                        {obsDef?.icon}
                       </span>
                     )}
 
