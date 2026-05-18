@@ -15,6 +15,9 @@ const TOKENS = [
 ];
 
 // ============================================================
+// SIGHT RANGE OPTIONS (in feet, D&D standard values)
+// ============================================================
+const SIGHT_OPTIONS = [10, 20, 30, 60, 90, 120];
 
 // ============================================================
 // PARTY MANAGER COMPONENT
@@ -32,23 +35,29 @@ function PartyManager({ onAddToCombat }) {
   });
 
   // ---- Form visibility ----
-  const [showForm, setShowForm]       = useState(false);
+  const [showForm, setShowForm]           = useState(false);
 
   // ---- Which member is being edited ----
-  const [editingId, setEditingId]     = useState(null);
+  const [editingId, setEditingId]         = useState(null);
 
   // ---- Which member we're adding to combat (waiting for initiative) ----
   const [addingInitFor, setAddingInitFor] = useState(null);
 
   // ---- Initiative input value ----
-  const [initInput, setInitInput]     = useState('');
+  const [initInput, setInitInput]         = useState('');
 
   // ---- Form fields ----
+  // sight: normal vision range in feet
+  // darkvision: whether this PC has darkvision
+  // darkvisionRange: how far darkvision reaches in feet
   const [form, setForm] = useState({
-    name:  '',
-    token: 'warrior',
-    maxHp: 20,
-    role:  '',
+    name:           '',
+    token:          'warrior',
+    maxHp:          20,
+    role:           '',
+    sight:          30,
+    darkvision:     false,
+    darkvisionRange: 60,
   });
 
 
@@ -64,7 +73,15 @@ function PartyManager({ onAddToCombat }) {
   // OPEN FORM FOR NEW CHARACTER
   // ============================================================
   const openAddForm = () => {
-    setForm({ name: '', token: 'warrior', maxHp: 20, role: '' });
+    setForm({
+      name:            '',
+      token:           'warrior',
+      maxHp:           20,
+      role:            '',
+      sight:           30,
+      darkvision:      false,
+      darkvisionRange: 60,
+    });
     setEditingId(null);
     setShowForm(true);
     setAddingInitFor(null);
@@ -76,10 +93,13 @@ function PartyManager({ onAddToCombat }) {
   // ============================================================
   const openEditForm = (member) => {
     setForm({
-      name:  member.name,
-      token: member.token.id,
-      maxHp: member.maxHp,
-      role:  member.role || '',
+      name:            member.name,
+      token:           member.token.id,
+      maxHp:           member.maxHp,
+      role:            member.role || '',
+      sight:           member.sight || 30,
+      darkvision:      member.darkvision || false,
+      darkvisionRange: member.darkvisionRange || 60,
     });
     setEditingId(member.id);
     setShowForm(true);
@@ -96,19 +116,33 @@ function PartyManager({ onAddToCombat }) {
     const token = TOKENS.find(t => t.id === form.token) || TOKENS[0];
 
     if (editingId) {
+      // ---- Update existing member ----
       setParty(prev => prev.map(m =>
         m.id === editingId
-          ? { ...m, name: form.name.trim(), token, maxHp: parseInt(form.maxHp) || 20, role: form.role }
+          ? {
+              ...m,
+              name:            form.name.trim(),
+              token,
+              maxHp:           parseInt(form.maxHp) || 20,
+              role:            form.role,
+              sight:           parseInt(form.sight) || 30,
+              darkvision:      form.darkvision,
+              darkvisionRange: parseInt(form.darkvisionRange) || 60,
+            }
           : m
       ));
     } else {
+      // ---- Add new member ----
       if (party.length >= 8) return;
       setParty(prev => [...prev, {
-        id:    Date.now(),
-        name:  form.name.trim(),
+        id:              Date.now(),
+        name:            form.name.trim(),
         token,
-        maxHp: parseInt(form.maxHp) || 20,
-        role:  form.role,
+        maxHp:           parseInt(form.maxHp) || 20,
+        role:            form.role,
+        sight:           parseInt(form.sight) || 30,
+        darkvision:      form.darkvision,
+        darkvisionRange: parseInt(form.darkvisionRange) || 60,
       }]);
     }
 
@@ -161,7 +195,6 @@ function PartyManager({ onAddToCombat }) {
 
   // ============================================================
   // ADD ALL TO COMBAT
-  // Uses a random roll for each — DM can adjust in tracker
   // ============================================================
   const addAllToCombat = () => {
     party.forEach(member => {
@@ -180,6 +213,17 @@ function PartyManager({ onAddToCombat }) {
 
 
   // ============================================================
+  // RENDER SIGHT SUMMARY for party list
+  // Shows a compact summary of sight values per member
+  // ============================================================
+  const renderSightSummary = (member) => {
+    const parts = [`👁 ${member.sight || 30}ft`];
+    if (member.darkvision) parts.push(`🌙 ${member.darkvisionRange || 60}ft`);
+    return parts.join('  ');
+  };
+
+
+  // ============================================================
   // RENDER
   // ============================================================
   return (
@@ -193,7 +237,7 @@ function PartyManager({ onAddToCombat }) {
             <button
               className="party-add-all-btn"
               onClick={addAllToCombat}
-              title="Add all to combat with random initiative"
+              title="Add all to combat"
             >
               ⚔️ All
             </button>
@@ -225,10 +269,15 @@ function PartyManager({ onAddToCombat }) {
               <i className={`ra ${member.token.icon}`} style={{ color: member.token.color }} />
             </div>
 
-            {/* Name and role */}
+            {/* Name, role and sight summary */}
             <div className="party-member-info">
               <span className="party-member-name">{member.name}</span>
-              {member.role && <span className="party-member-role">{member.role}</span>}
+              {member.role && (
+                <span className="party-member-role">{member.role}</span>
+              )}
+              <span className="party-member-sight">
+                {renderSightSummary(member)}
+              </span>
             </div>
 
             {/* HP */}
@@ -294,6 +343,7 @@ function PartyManager({ onAddToCombat }) {
             {editingId ? 'Edit Character' : 'New Character'}
           </div>
 
+          {/* Name */}
           <input
             className="party-form-input"
             placeholder="Name"
@@ -303,13 +353,15 @@ function PartyManager({ onAddToCombat }) {
             autoFocus
           />
 
+          {/* Role */}
           <input
             className="party-form-input"
-            placeholder="Role (e.g. Fighter, Wizard, Familiar)"
+            placeholder="Role (e.g. Fighter, Wizard)"
             value={form.role}
             onChange={e => setForm(f => ({ ...f, role: e.target.value }))}
           />
 
+          {/* Max HP */}
           <input
             className="party-form-input"
             type="number"
@@ -318,7 +370,53 @@ function PartyManager({ onAddToCombat }) {
             onChange={e => setForm(f => ({ ...f, maxHp: e.target.value }))}
           />
 
+          {/* ---- SIGHT & DARKVISION SECTION ---- */}
+          <div className="party-form-section-label">Vision</div>
+
+          {/* Normal sight range */}
+          <div className="party-form-row">
+            <label className="party-form-field-label">👁 Sight range</label>
+            <select
+              className="party-form-input party-form-select"
+              value={form.sight}
+              onChange={e => setForm(f => ({ ...f, sight: parseInt(e.target.value) }))}
+            >
+              {SIGHT_OPTIONS.map(ft => (
+                <option key={ft} value={ft}>{ft} ft</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Darkvision toggle */}
+          <div className="party-form-row">
+            <label className="party-form-field-label">🌙 Darkvision</label>
+            <button
+              className={`party-darkvision-toggle ${form.darkvision ? 'active' : ''}`}
+              onClick={() => setForm(f => ({ ...f, darkvision: !f.darkvision }))}
+              type="button"
+            >
+              {form.darkvision ? 'Yes' : 'No'}
+            </button>
+          </div>
+
+          {/* Darkvision range — only shown if darkvision is on */}
+          {form.darkvision && (
+            <div className="party-form-row">
+              <label className="party-form-field-label">🌙 Darkvision range</label>
+              <select
+                className="party-form-input party-form-select"
+                value={form.darkvisionRange}
+                onChange={e => setForm(f => ({ ...f, darkvisionRange: parseInt(e.target.value) }))}
+              >
+                {SIGHT_OPTIONS.map(ft => (
+                  <option key={ft} value={ft}>{ft} ft</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* Token picker */}
+          <div className="party-form-section-label">Token</div>
           <div className="party-token-grid">
             {TOKENS.map(token => (
               <button

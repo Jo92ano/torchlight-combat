@@ -863,3 +863,63 @@ input[type="number"] { -moz-appearance: textfield; }
   color: var(--red);
   background: rgba(225,90,90,.1);
 }
+/* ---- Party form section label ---- */
+.party-form-section-label {
+  font: 700 10px/1 'Cinzel';
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---- Party form row (label + input side by side) ---- */
+.party-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.party-form-field-label {
+  font: 500 12px/1 'Inter';
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.party-form-select {
+  width: auto;
+  min-width: 90px;
+  text-align: right;
+  padding: 5px 8px;
+}
+
+/* ---- Darkvision toggle button ---- */
+.party-darkvision-toggle {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  border-radius: 6px;
+  padding: 5px 14px;
+  font: 600 12px/1 'Inter';
+  cursor: pointer;
+  transition: all .15s;
+  min-width: 60px;
+}
+.party-darkvision-toggle:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.party-darkvision-toggle.active {
+  background: rgba(95,163,217,.12);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* ---- Sight summary in party list ---- */
+.party-member-sight {
+  font: 500 10px/1 'JetBrains Mono';
+  color: var(--text-faint);
+  margin-top: 1px;
+}
