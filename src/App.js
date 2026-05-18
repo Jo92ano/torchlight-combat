@@ -8,14 +8,17 @@ import React, { useState } from 'react';
 import './App.css';
 
 // ---- Combat components ----
-import Initiative   from './components/Initiative';
-import BattleMap    from './components/BattleMap';
-import DiceRoller   from './components/DiceRoller';
-import TurnTimer    from './components/TurnTimer';
-import PartyManager from './components/PartyManager';
+import Initiative    from './components/Initiative';
+import BattleMap     from './components/BattleMap';
+import DiceRoller    from './components/DiceRoller';
+import TurnTimer     from './components/TurnTimer';
+import PartyManager  from './components/PartyManager';
 
 // ---- Notes component ----
 import Notes from './components/Notes';
+
+// ---- Session Manager ----
+import SessionManager from './components/SessionManager';
 
 
 // ============================================================
@@ -32,6 +35,9 @@ function App() {
   // ============================================================
   const [activeTab, setActiveTab] = useState('combat');
 
+  // ---- Session manager open/close ----
+  const [sessionOpen, setSessionOpen] = useState(false);
+
 
   // ============================================================
   // SHARED COMBAT STATE
@@ -41,8 +47,7 @@ function App() {
 
 
   // ============================================================
-  // MAP STATE — lifted from BattleMap
-  // Lives here so PlayerView can also read it later
+  // MAP STATE — lives here so PlayerView and SessionManager can access it
   // ============================================================
 
   // Terrain grid: 2D array of terrain type strings
@@ -78,24 +83,56 @@ function App() {
       {/* ---- APP HEADER ---- */}
       <div className="app-header">
         <h1>🔦 Torchlight Combat</h1>
+
         <div className="app-tabs">
+          {/* Combat tab */}
           <button
             className={`app-tab ${activeTab === 'combat' ? 'active' : ''}`}
             onClick={() => setActiveTab('combat')}
           >
             ⚔️ Combat
           </button>
+
+          {/* Notes tab */}
           <button
             className={`app-tab ${activeTab === 'notes' ? 'active' : ''}`}
             onClick={() => setActiveTab('notes')}
           >
             📝 Notes
           </button>
+
+          {/* Session Manager button — always visible */}
+          <button
+            className="app-tab session-tab"
+            onClick={() => setSessionOpen(true)}
+            title="Save / Load session"
+          >
+            💾 Sessions
+          </button>
         </div>
       </div>
 
+
+      {/* ---- SESSION MANAGER MODAL ---- */}
+      <SessionManager
+        isOpen={sessionOpen}
+        onClose={() => setSessionOpen(false)}
+        combatants={combatants}
+        setCombatants={setCombatants}
+        currentTurn={currentTurn}
+        setCurrentTurn={setCurrentTurn}
+        terrain={terrain}
+        setTerrain={setTerrain}
+        obstacles={obstacles}
+        setObstacles={setObstacles}
+        tokenPositions={tokenPositions}
+        setTokenPositions={setTokenPositions}
+      />
+
+
       {/* ---- NOTES PAGE ---- */}
       {activeTab === 'notes' && <Notes />}
+
 
       {/* ---- COMBAT VIEW ---- */}
       <div style={{ display: activeTab === 'combat' ? 'block' : 'none' }}>
